@@ -1,12 +1,15 @@
 import { LOGIN, REQUEST_PASSWORD_RESET, RESET_PASSWORD, CHANGE_PASSWORD, ERROR } from '../constants/ActionTypes';
 
+
+
+
 const AuthReducer = (state = [], action) => {
   switch (action.type) {
     case LOGIN:
-      return { ...state, user: action.payload };
+      return { ...state, user: action.payload, isError: false };
 
     case ERROR:
-      return { ...state, message: action.payload };
+      return { ...state, user: action.payload, isError: true};
 
     case REQUEST_PASSWORD_RESET:
       return { ...state, user: action.payload };

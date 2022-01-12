@@ -1,11 +1,22 @@
 import Login from "./components/Auth/Login";
-
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
   return (
-    <div className="App">
-      <Login />
-    </div>
+    <Router>
+      <main>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+          <Route exact path="/dashboard" element={<Dashboard />} />
+          {/* <Route exact path="/profile" component={MyProfile} />
+          <Route exact path="/addEmployee" component={AddEmployee} /> */}
+        </Routes>
+        <ToastContainer />
+      </main>
+    </Router>
   );
 }
 
