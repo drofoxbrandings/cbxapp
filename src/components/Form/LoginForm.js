@@ -1,25 +1,31 @@
 import { TextField, Typography } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup';
-import { Button } from '@mui/material';
+import { Button, InputAdornment, IconButton } from '@mui/material';
 import useStyles from './FormStyles'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Login } from '../../actions/Auth'
-import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import _ from 'lodash';
+import { } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const LoginForm = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const state = useSelector(state => state.AuthReducer)
     const navigate = useNavigate();
     const [isLoading, setisLoading] = useState(false);
-    const [isError, setIsError] = useState(false)
+    const [isError, setIsError] = useState("")
+    const [showPassword, setShowPassword] = useState(false)
 
+
+    const handleClickShowPassword = () => {
+        console.log(showPassword);
+        setShowPassword(!showPassword)
+    }
 
     return (
         <React.Fragment>
@@ -35,14 +41,8 @@ const LoginForm = () => {
                         .min(8, "Incorrect password")
                 })}
                 onSubmit={(values, { setSubmitting }) => {
-                    dispatch(Login(values))
-                    setIsError(state.isError)
-                    if (isError === true) {
-                        console.log("error")
-                    }
-                    else{
-                        console.log("success")
-                    }
+                    dispatch(Login(values, setIsError, navigate))
+                    setisLoading(true)
                     setSubmitting(false)
                 }}
             >
@@ -71,14 +71,28 @@ const LoginForm = () => {
                                         fullWidth
                                         label="Password"
                                         name="password"
-                                        type="password"
+                                        type={showPassword ? 'text' : 'password'}
                                         value={formik.values.password}
                                         autoComplete="off"
                                         variant="standard"
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        edge="end"
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
+                                        }}
+
                                     />
                                     <ErrorMessage className={classes.errorMsg} component="span" name="password" />
                                 </div>
-                                <Button fullWidth variant="contained" type="submit">Login</Button>
+                                <Button fullWidth variant="contained" type="submit" className={classes.mup1}>Login</Button>
                             </Form>
                             <Typography className={classes.selfEnd}>I forgot my password</Typography>
                         </React.Fragment>

@@ -11,5 +11,8 @@ export default makeStyles((theme) => ({
     selfEnd: {
         display: 'flex',
         justifyContent: 'flex-end'
+    },
+    mup1:{
+        marginTop: '1rem !important'
     }
 })); 
