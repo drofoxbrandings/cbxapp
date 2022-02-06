@@ -1,4 +1,4 @@
-import { TextField, Typography } from '@mui/material'
+import { TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup';
@@ -6,9 +6,7 @@ import { Button, InputAdornment, IconButton } from '@mui/material';
 import useStyles from './FormStyles'
 import { useDispatch } from 'react-redux';
 import { Login } from '../../actions/Auth'
-import { useNavigate } from 'react-router-dom';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate, Link } from 'react-router-dom';
 import { } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -17,15 +15,14 @@ const LoginForm = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const [isLoading, setisLoading] = useState(false);
     const [isError, setIsError] = useState("")
     const [showPassword, setShowPassword] = useState(false)
-
 
     const handleClickShowPassword = () => {
         console.log(showPassword);
         setShowPassword(!showPassword)
     }
+
 
     return (
         <React.Fragment>
@@ -42,7 +39,7 @@ const LoginForm = () => {
                 })}
                 onSubmit={(values, { setSubmitting }) => {
                     dispatch(Login(values, setIsError, navigate))
-                    setisLoading(true)
+
                     setSubmitting(false)
                 }}
             >
@@ -92,19 +89,20 @@ const LoginForm = () => {
                                     />
                                     <ErrorMessage className={classes.errorMsg} component="span" name="password" />
                                 </div>
-                                <Button fullWidth variant="contained" type="submit" className={classes.mup1}>Login</Button>
+                                <Button fullWidth
+                                    variant="contained"
+                                    type="submit"
+                                    className={classes.mup1}>
+                                    Login
+                                </Button>
                             </Form>
-                            <Typography className={classes.selfEnd}>I forgot my password</Typography>
+                            <div className={classes.flexend}>
+                                <Link to='/forgotPassword' className={`${classes.selfEnd} ${classes.link}`}>I forgot my password</Link>
+                            </div>
                         </React.Fragment>
                     )
                 }
             </Formik>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={isLoading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
         </React.Fragment>
     )
 }

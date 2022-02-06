@@ -14,5 +14,14 @@ export default makeStyles((theme) => ({
     },
     mup1:{
         marginTop: '1rem !important'
+    },
+    link:{
+        color: theme.palette.secondary.main,
+        textDecoration: 'none',
+        width: 'max-content'
+    },
+    flexend:{
+        display: 'flex',
+        justifyContent: 'flex-end'
     }
 })); 

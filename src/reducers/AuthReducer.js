@@ -10,11 +10,14 @@ const AuthReducer = (state = [], action) => {
 
     case ERROR:
       toast.error(action.payload, {
-        position: toast.POSITION.TOP_RIGHT, autoClose: 10000
+        position: toast.POSITION.TOP_RIGHT, autoClose: 5000
       })
       return { ...state, isError: action.payload };
 
     case REQUEST_PASSWORD_RESET:
+      toast.success(action.payload.message, {
+        position: toast.POSITION.TOP_RIGHT, autoClose: 5000
+      })
       return { ...state, user: action.payload };
 
     case RESET_PASSWORD:
