@@ -22,9 +22,12 @@ const ForgotPassword = () => {
             validationSchema={Yup.object({
                 email: Yup.string().required("Email is required").email('Invalid Email'),
             })}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, { resetForm, setSubmitting }) => {
                 dispatch(SendResetLink(values, setIsError))
                 setSubmitting(false)
+                setTimeout(() => {
+                    resetForm()
+                }, 1000);
             }}
         >
             {
