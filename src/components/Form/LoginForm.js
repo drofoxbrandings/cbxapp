@@ -78,13 +78,13 @@ const LoginForm = () => {
                                                         aria-label="toggle password visibility"
                                                         onClick={handleClickShowPassword}
                                                         edge="end"
+                                                        size="small"
                                                     >
                                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             )
                                         }}
-
                                     />
                                     <ErrorMessage className={classes.errorMsg} component="span" name="password" />
                                 </div>

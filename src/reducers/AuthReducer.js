@@ -1,4 +1,4 @@
-import { LOGIN, REQUEST_PASSWORD_RESET, RESET_PASSWORD, CHANGE_PASSWORD, ERROR } from '../constants/ActionTypes';
+import { LOGIN, REQUEST_PASSWORD_RESET, RESET_PASSWORD, CHANGE_PASSWORD, ERROR, LOGOUT } from '../constants/ActionTypes';
 import { toast } from 'react-toastify'
 
 
@@ -21,6 +21,9 @@ const AuthReducer = (state = [], action) => {
       return { ...state, user: action.payload };
 
     case RESET_PASSWORD:
+      toast.success(action.payload.message, {
+        position: toast.POSITION.TOP_RIGHT, autoClose: 5000
+      })
       return { ...state, user: action.payload };
 
     case CHANGE_PASSWORD:

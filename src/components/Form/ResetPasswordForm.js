@@ -31,11 +31,15 @@ const ResetPasswordForm = () => {
                 const user = urlParams.get('user')
                 const token = urlParams.get('token')
                 const data = {
-                    userId: user, 
+                    userId: user,
                     resetToken: token,
-                    password: Object.values(values)
+                    password: values.password
                 }
                 dispatch(ResetPassword(data, setIsError, navigate))
+                setSubmitting(false)
+                setTimeout(() => {
+                    resetForm()
+                }, 1000);
             }}
         >
             {(formik) => (
