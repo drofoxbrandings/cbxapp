@@ -12,8 +12,8 @@ export default makeStyles((theme) => ({
         justifyContent: 'center',
         height: '100vh',
         alignItems: 'center',
-        '& .MuiGrid-root':{
-            padding: '1rem'
-        }
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column'
+        },
     },
 })); 

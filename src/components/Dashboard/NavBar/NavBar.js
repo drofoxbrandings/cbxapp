@@ -3,11 +3,26 @@ import React from 'react'
 import logoWhite from '../../../assets/logo_white.svg'
 import useStyles from './NavBarStyles'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { logout } from '../../../actions/Auth'
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 
-const settings = ['Account', 'Logout'];
+const settings = [
+    {
+        text: 'Account',
+        icon: <AssignmentIndIcon sx={{mr: 2, fontSize: 22, color: '#0f112e'}}/>
+    },
+    {
+        text: 'Logout',
+        icon: <PowerSettingsNewIcon sx={{mr: 2, fontSize: 22, color: '#e74c3c'}}/>
+    }];
+
 const NavBar = () => {
     const classes = useStyles()
-
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -26,25 +41,34 @@ const NavBar = () => {
         setAnchorElUser(null);
     };
 
+    const handleMenuClick = (i, e) => {
+        e.preventDefault()
+        if (i === 0) {
+            handleCloseNavMenu()
+        }
+        if (i === 1) {
+            dispatch(logout(navigate))
+        }
+    }
+
     return (
         <AppBar position='sticky' >
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography
-                        // className={classes.branding}
+                        className={classes.branding}
                         noWrap
                         component="div"
-                        sx={{ mr: 2, ml: 2, display: { xs: 'none', md: 'flex' }, px: 1, py: .35 }}>
-                        <img width="30%" src={logoWhite} alt="branding" />
+                        sx={{ mr: 2, ml: 2, display: { xs: 'flex' }, px: 1, py: .35 }}>
+                        <img  src={logoWhite} alt="branding" />
                     </Typography>
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, color: "#fff" }}>
-                                <AccountCircleIcon />
-                            </IconButton>
-                        </Tooltip>
+                        <IconButton onClick={handleOpenUserMenu} sx={{ mr: 2, p: 0, color: "#fff" }}>
+                            <AccountCircleIcon sx={{ mr: 2 }} />
+                            <Typography variant="body1">username</Typography>
+                        </IconButton>
                         <Menu
-                            sx={{ mt: '45px', minWidth: 600 }}
+                            sx={{ mt: '30px' }}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{
@@ -54,14 +78,15 @@ const NavBar = () => {
                             keepMounted
                             transformOrigin={{
                                 vertical: 'top',
-                                horizontal: 'right',
+                                horizontal: 'center',
                             }}
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                            {settings.map((setting, i) => (
+                                <MenuItem key={i} onClick={(e) => handleMenuClick(i, e)} sx={{ minWidth: 200 }}>
+                                    {setting.icon}
+                                    <Typography textAlign="center">{setting.text}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>

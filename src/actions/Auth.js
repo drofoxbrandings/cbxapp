@@ -10,8 +10,9 @@ export const Login = (loginData, callback, navigate) => async (dispatch) => {
     const { data } = await api.Login(loginData)
     const authToken = _.get(data, "token", "");
     if (authToken) {
-      dispatch({ type: LOGIN, payload: data })
+      dispatch({ type: LOGIN, payload: data, isLoggedIn: true })
       ls.set('AuthToken', data.token)
+      ls.set('isLoggedIn', true)
       navigate('/dashboard')
     }
     else {
@@ -42,7 +43,6 @@ export const SendResetLink = (email, callback) => async (dispatch) => {
 export const ResetPassword = (resetData, callback, navigate) => async (dispatch) => {
   try {
     const { data } = await api.ResetPassword(resetData)
-    console.log(data)
     if (data.status === "200") {
       dispatch({ type: RESET_PASSWORD, payload: data })
       setTimeout(() => {
