@@ -6,22 +6,29 @@ import SecureLS from 'secure-ls'
 
 const ls = new SecureLS({ encodingType: "aes" })
 export const Login = (loginData, callback, navigate) => async (dispatch) => {
+  dispatch({ type: IS_LOADING, payload: true})
   try {
     const { data } = await api.Login(loginData)
-    const authToken = _.get(data, "token", "");
-    if (authToken) {
-      dispatch({ type: LOGIN, payload: data, isLoggedIn: true })
+    .then((res) => {
+      const authToken = _.get(data, "token", "");
+      if (authToken) {
+      dispatch({ type: IS_LOADING, payload: false})
+      dispatch({ type: LOGIN, payload: data})
+      dispatch({type: IS_LOGGEDIN, payload: true})
       ls.set('AuthToken', data.token)
       ls.set('isLoggedIn', true)
       navigate('/dashboard')
     }
-    else {
+    })
+    .catch((error) => {
+      dispatch({ type: IS_LOADING, payload: false})
       dispatch({ type: ERROR, payload: data.message })
       localStorage.set('AuthToken', "")
-    }
-
+    })
   } catch (error) {
-    callback(error.message);
+    dispatch({ type: IS_LOADING, payload: false})
+    dispatch({ type: ERROR, payload: data.message })
+    localStorage.set('AuthToken', "")
   }
 };
 
