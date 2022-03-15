@@ -1,17 +1,23 @@
-import { LOGIN, REQUEST_PASSWORD_RESET, RESET_PASSWORD, CHANGE_PASSWORD, ERROR } from '../constants/ActionTypes';
+import { LOGIN, ERROR, IS_LOADING, IS REQUEST_PASSWORD_RESET, RESET_PASSWORD, CHANGE_PASSWORD  } from '../constants/ActionTypes';
 import { toast } from 'react-toastify'
 
+const initialState = {
+isLoading: false,
+  user: [],
+  isLoggedin: false,
+  isError: false
+}
 
 
-const AuthReducer = (state = [], action) => {
+const AuthReducer = (state = initialState, action) => {
   switch (action.type) {
+    case IS_LOADING:
+      return {...state, isLoading: action.payload}
     case LOGIN:
-      return { ...state, user: action.payload, isLoggedIn: action.isLoggedIn };
-
+      return { ...state, user: action.payload};
+    case IS_LOGGEDIN: 
+      return {...state, isLoggedin: action.payload}
     case ERROR:
-      toast.error(action.payload, {
-        position: toast.POSITION.TOP_RIGHT, autoClose: 5000
-      })
       return { ...state, isError: action.payload };
 
     case REQUEST_PASSWORD_RESET:
