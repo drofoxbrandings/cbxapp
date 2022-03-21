@@ -35,11 +35,8 @@ const ResetPasswordForm = () => {
                     resetToken: token,
                     password: values.password
                 }
-                dispatch(ResetPassword(data, setIsError, navigate))
+                dispatch(ResetPassword(data, navigate, resetForm))
                 setSubmitting(false)
-                setTimeout(() => {
-                    resetForm()
-                }, 1000);
             }}
         >
             {(formik) => (

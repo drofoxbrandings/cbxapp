@@ -23,5 +23,10 @@ export default makeStyles((theme) => ({
     flexend:{
         display: 'flex',
         justifyContent: 'flex-end'
+    },
+    buttonLink:{
+        padding: '1rem',
+        width: '100%',
+        
     }
 })); 

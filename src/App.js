@@ -14,14 +14,13 @@ import { useSelector } from "react-redux";
 const ls = new SecureLS({ encodingType: "aes" })
 
 function App() {
-  const state = useSelector((state) => state)
-  const isLoggedIn = _.get(state, "AuthReducer.isLoggedIn", "")
+  const isLoggedin = useSelector((state) => state.AuthReducer.isLoggedin)
   return (
     <Router>
       <main>
         <Routes>
           <Route exact path="/" element={<Login />} />
-          <Route exact path='/dashboard' element={<PrivateRoute isLoggedIn={isLoggedIn} />}>
+          <Route exact path='/dashboard' element={<PrivateRoute isLoggedIn={isLoggedin} />}>
             <Route exact path='/dashboard' element={<Dashboard />} />
           </Route>
           <Route exact path="/forgotPassword" element={<ForgotPassword />} />

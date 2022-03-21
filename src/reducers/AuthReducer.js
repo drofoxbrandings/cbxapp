@@ -1,29 +1,35 @@
-import { LOGIN, REQUEST_PASSWORD_RESET, RESET_PASSWORD, CHANGE_PASSWORD, ERROR } from '../constants/ActionTypes';
+import { LOGIN, IS_LOGGEDIN, LOADING, REQUEST_PASSWORD_RESET, RESET_PASSWORD, CHANGE_PASSWORD, ERROR, ERROR_MESSAGE } from '../constants/ActionTypes';
 import { toast } from 'react-toastify'
 
+const initialState = {
+  loading: false,
+  isLoggedin: false,
+  user: {},
+  isError: false,
+  errorMessage: ''
+}
 
-
-const AuthReducer = (state = [], action) => {
+const AuthReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOADING:
+      return { ...state, loading: action.payload };
+
+    case IS_LOGGEDIN:
+      return { ...state, isLoggedin: action.payload };
+
     case LOGIN:
-      return { ...state, user: action.payload, isLoggedIn: action.isLoggedIn };
+      return { ...state, user: action.payload };
 
     case ERROR:
-      toast.error(action.payload, {
-        position: toast.POSITION.TOP_RIGHT, autoClose: 5000
-      })
       return { ...state, isError: action.payload };
 
+    case ERROR_MESSAGE:
+      return { ...state, errorMessage: action.payload };
+
     case REQUEST_PASSWORD_RESET:
-      toast.success(action.payload.message, {
-        position: toast.POSITION.TOP_RIGHT, autoClose: 5000
-      })
       return { ...state, user: action.payload };
 
     case RESET_PASSWORD:
-      toast.success(action.payload.message, {
-        position: toast.POSITION.TOP_RIGHT, autoClose: 5000
-      })
       return { ...state, user: action.payload };
 
     case CHANGE_PASSWORD:

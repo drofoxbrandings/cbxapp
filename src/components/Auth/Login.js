@@ -16,7 +16,8 @@ const Login = () => {
                             xs: '0 0 5px 0 #0000003d !important'
                         },
                     }}>
-                    <img src="https://www.cityboxcargomovers.com/static/media/logo2.64d64f34.svg" alt="" />
+                    {/* <img src="https://www.cityboxcargomovers.com/static/media/logo2.64d64f34.svg" alt="" /> */}
+                    <img width="100%" src="https://images.unsplash.com/photo-1611242320536-f12d3541249b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="" />
                 </Paper>
             </Grid>
             <Grid item xs={12} sm={5} md={6} lg={3}>

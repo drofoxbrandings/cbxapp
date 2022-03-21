@@ -9,7 +9,7 @@ const ForgotPassword = () => {
         <Grid container className={classes.loginContainer}>
             <Grid item xs={12} md={8} lg={3}>
                 <Paper className={classes.loginForm} elevation={3}>
-                    <Typography variant="h4" component="h4">Get Link</Typography>
+                    <Typography variant="h4" component="h4" sx={{textTransform: "uppercase", maxWidth: "70%"}}>Get Password Reset Link</Typography>
                     <ForgotPasswordForm />
                 </Paper>
             </Grid>
