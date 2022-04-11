@@ -1,4 +1,4 @@
-import { AppBar, Container, Toolbar, Typography, Box, Tooltip, IconButton, Menu, MenuItem } from '@mui/material'
+import { AppBar, Container, Toolbar, Typography, Box, Tooltip, Button, Menu, MenuItem } from '@mui/material'
 import React from 'react'
 import logoWhite from '../../../assets/logo_white.svg'
 import useStyles from './NavBarStyles'
@@ -6,17 +6,19 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { logout } from '../../../actions/Auth'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
+import { User } from '../../../actions/User';
+import { toast } from 'react-toastify'
 
 const settings = [
     {
         text: 'Account',
-        icon: <AssignmentIndIcon sx={{mr: 2, fontSize: 22, color: '#0f112e'}}/>
+        icon: <AssignmentIndIcon sx={{ mr: 2, fontSize: 22, color: '#0f112e' }} />
     },
     {
         text: 'Logout',
-        icon: <PowerSettingsNewIcon sx={{mr: 2, fontSize: 22, color: '#e74c3c'}}/>
+        icon: <PowerSettingsNewIcon sx={{ mr: 2, fontSize: 22, color: '#e74c3c' }} />
     }];
 
 const NavBar = () => {
@@ -25,6 +27,9 @@ const NavBar = () => {
     const navigate = useNavigate()
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const user = useSelector((state) => state.AuthReducer.user)
+    const isError = useSelector((state) => state.UserReducer.isError)
+    const errorMessage = useSelector((state) => state.UserReducer.errorMessage)
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -44,11 +49,17 @@ const NavBar = () => {
     const handleMenuClick = (i, e) => {
         e.preventDefault()
         if (i === 0) {
-            handleCloseNavMenu()
+            dispatch(User(user.userId, navigate))
+            if (isError) {
+                toast.error(errorMessage, {
+                    position: toast.POSITION.TOP_RIGHT, autoClose: 5000
+                })
+            }
         }
         if (i === 1) {
             dispatch(logout(navigate))
         }
+        handleCloseUserMenu()
     }
 
     return (
@@ -60,13 +71,13 @@ const NavBar = () => {
                         noWrap
                         component="div"
                         sx={{ mr: 2, ml: 2, display: { xs: 'flex' }, px: 1, py: .35 }}>
-                        <img  src={logoWhite} alt="branding" />
+                        <img src={logoWhite} alt="branding" />
                     </Typography>
                     <Box sx={{ flexGrow: 0 }}>
-                        <IconButton onClick={handleOpenUserMenu} sx={{ mr: 2, p: 0, color: "#fff" }}>
+                        <Button onClick={handleOpenUserMenu} sx={{ mr: 2, p: 0, color: "#fff" }} >
                             <AccountCircleIcon sx={{ mr: 2 }} />
-                            <Typography variant="body1">username</Typography>
-                        </IconButton>
+                            <Typography variant="body1">{user.username}</Typography>
+                        </Button>
                         <Menu
                             sx={{ mt: '30px' }}
                             id="menu-appbar"

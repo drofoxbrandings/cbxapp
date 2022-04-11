@@ -12,6 +12,7 @@ const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))
 const theme = createTheme({
   palette: {
     primary: {
+      light: '#E15169',
       main: '#a81d34',
     },
     secondary: {

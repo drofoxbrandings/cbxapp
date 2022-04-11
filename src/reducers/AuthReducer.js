@@ -1,12 +1,12 @@
 import { LOGIN, IS_LOGGEDIN, LOADING, REQUEST_PASSWORD_RESET, RESET_PASSWORD, CHANGE_PASSWORD, ERROR, ERROR_MESSAGE } from '../constants/ActionTypes';
-import { toast } from 'react-toastify'
 
 const initialState = {
   loading: false,
   isLoggedin: false,
   user: {},
   isError: false,
-  errorMessage: ''
+  errorMessage: '',
+  data: ''
 }
 
 const AuthReducer = (state = initialState, action) => {
@@ -27,13 +27,13 @@ const AuthReducer = (state = initialState, action) => {
       return { ...state, errorMessage: action.payload };
 
     case REQUEST_PASSWORD_RESET:
-      return { ...state, user: action.payload };
+      return { ...state, data: action.payload };
 
     case RESET_PASSWORD:
-      return { ...state, user: action.payload };
+      return { ...state, data: action.payload };
 
     case CHANGE_PASSWORD:
-      return { ...state, user: action.payload };
+      return { ...state, data: action.payload };
 
     default:
       return state;

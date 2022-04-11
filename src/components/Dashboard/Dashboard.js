@@ -1,19 +1,16 @@
 import React from 'react'
-import NavBar from './NavBar/NavBar'
-import NavButton from './NavBar/NavButton'
-import { MainNavigation } from '../../constants/MainNavigation'
-import { Grid, Container } from '@mui/material'
+import { Grid, Container, Typography, Paper } from '@mui/material'
 
 const Dashboard = () => {
     return (
         <div>
-            <NavBar />
             <Container sx={{ mt: 2 }}>
                 <Grid container>
-                    <Grid item xs={12} md={12} >
-                        {MainNavigation.map((navItem, i) => (
-                            <NavButton menuItem={navItem.navItem} menuIcon={navItem.navIcon} />
-                        ))}
+                    <Grid item md={6} sx={{ position: 'absolute', left: '50%', transform: "translateX(-50%)" }}>
+                        <Paper sx={{padding: '1rem'}}>
+                            <Typography variant="h3" sx={{ marginBottom: '1rem' }}>Welcome to Citybox cargo movers.</Typography>
+                            <Typography>Please select shipment from menu to view/add/update/delete shipment information</Typography>
+                        </Paper>
                     </Grid>
                 </Grid>
             </Container>

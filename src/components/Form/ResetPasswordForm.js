@@ -1,9 +1,9 @@
-import { Button, TextField } from '@mui/material';
+import { Alert, Backdrop, Button, CircularProgress, TextField } from '@mui/material';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { Fragment, useState } from 'react';
 import * as Yup from 'yup'
 import useStyles from './FormStyles'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ResetPassword } from '../../actions/Auth'
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -11,7 +11,9 @@ const ResetPasswordForm = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [isError, setIsError] = useState("")
+    const isError = useSelector((state) => state.AuthReducer.isError)
+    const errorMessage = useSelector((state) => state.AuthReducer.errorMessage)
+    const isLoading = useSelector((state) => state.AuthReducer.isLoading)
     return <Fragment>
         <Formik
             initialValues={{
@@ -40,15 +42,27 @@ const ResetPasswordForm = () => {
             }}
         >
             {(formik) => (
-                <Form onSubmit={formik.handleSubmit}>
-                    <div className={classes.formField}>
-                        <Field fullWidth as={TextField} type="password" name="password" id="password" label="Password" variant="standard" />
-                        <ErrorMessage className={classes.errorMsg} component="span" name="password" />
-                    </div>
-                    <Button type="submit" fullWidth variant="contained" color="primary">Reset Password</Button>
-                </Form>
+                <Fragment>
+                    {isError && <Alert severity="error">{errorMessage}</Alert>}
+                    <Form onSubmit={formik.handleSubmit}>
+                        <div className={classes.formField}>
+                            <Field fullWidth as={TextField} type="password" name="password" id="password" label="Password" variant="standard" />
+                            <ErrorMessage className={classes.errorMsg} component="span" name="password" />
+                        </div>
+                        <Button type="submit" fullWidth variant="contained" color="primary">Reset Password</Button>
+                    </Form>
+                </Fragment>
             )}
         </Formik>
+        {
+            isLoading &&
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        }
     </Fragment>
 };
 

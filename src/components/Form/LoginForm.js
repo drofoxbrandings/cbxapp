@@ -83,7 +83,7 @@ const LoginForm = () => {
                                                         edge="end"
                                                         size="small"
                                                     >
-                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                        {showPassword ? <Visibility /> : <VisibilityOff />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             )
