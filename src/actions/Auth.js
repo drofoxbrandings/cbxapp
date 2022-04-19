@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 
 const ls = new SecureLS({ encodingType: "aes" })
 export const Login = (loginData, navigate) => async (dispatch) => {
-  ls.clear()
+  ls.removeAll()
   dispatch({ type: LOADING, payload: true })
   try {
     const { data } = await api.Login(loginData)

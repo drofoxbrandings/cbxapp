@@ -21,4 +21,4 @@ export const ChangePassword = (data) => axios.post(baseUrl + '/api/auth/changePa
 
 export const getSingleUser = (uid) => axios.get(baseUrl + '/api/user/getSingleUser/' + uid, config).then(res => { return res });
 
-export const getShipment = () => axios.get(baseUrl + '/api/shipment/listShipment/', config).then(res => { return res });
+export const getShipment = (limit, offset) => axios.get(baseUrl + `/api/shipment/listShipment/?limit=${limit}&offset=${offset}`, config).then(res => { return res.data });
