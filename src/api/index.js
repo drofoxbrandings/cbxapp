@@ -1,8 +1,8 @@
 import axios from "axios";
 import SecureLS from 'secure-ls'
 
-// const baseUrl = 'https://cbxtrack.herokuapp.com'
-const baseUrl = 'http://localhost:5000'
+const baseUrl = 'https://cbxtrack.herokuapp.com'
+// const baseUrl = 'http://localhost:5000'
 
 const ls = new SecureLS({ encodingType: "aes" })
 
