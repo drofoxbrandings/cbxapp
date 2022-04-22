@@ -7,6 +7,7 @@ const baseUrl = 'https://cbxtrack.herokuapp.com'
 const ls = new SecureLS({ encodingType: "aes" })
 
 const token = ls.get('AuthToken')
+console.log(token)
 
 const config = {
     headers: { Authorization: token }
