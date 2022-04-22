@@ -1,6 +1,6 @@
 import { Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
-import LoginForm from '../Form/LoginForm'
+import LoginForm from './Form/LoginForm'
 import useStyles from './AuthStyles'
 
 const Login = () => {

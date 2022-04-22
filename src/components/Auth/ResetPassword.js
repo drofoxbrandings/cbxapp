@@ -1,6 +1,6 @@
 import { Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
-import ResetPasswordForm from '../Form/ResetPasswordForm'
+import ResetPasswordForm from './Form/ResetPasswordForm'
 import useStyles from './AuthStyles'
 
 const ResetPassword = () => {

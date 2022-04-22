@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { Grid, Paper } from '@mui/material'
-import ChangePasswordForm from '../Form/ChangePasswordForm'
+import ChangePasswordForm from '../Auth/Form/ChangePasswordForm'
 
 const ChangePassword = () => {
   return (

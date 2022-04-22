@@ -5,7 +5,7 @@ import { TextField, Button, Alert, Backdrop, CircularProgress } from '@mui/mater
 import useStyles from './FormStyles'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { SendResetLink } from '../../actions/Auth'
+import { SendResetLink } from '../../../actions/Auth'
 
 const ForgotPassword = () => {
     const classes = useStyles()

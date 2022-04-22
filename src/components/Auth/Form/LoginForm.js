@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Button, InputAdornment, IconButton } from '@mui/material';
 import useStyles from './FormStyles'
 import { useDispatch, useSelector } from 'react-redux';
-import { Login } from '../../actions/Auth'
+import { Login } from '../../../actions/Auth'
 import { useNavigate, Link } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -21,7 +21,6 @@ const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false)
 
     const handleClickShowPassword = () => {
-        console.log(showPassword);
         setShowPassword(!showPassword)
     }
 

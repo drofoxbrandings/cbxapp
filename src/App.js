@@ -18,6 +18,7 @@ import { Container, Grid } from "@mui/material";
 import NavButton from "./components/Dashboard/NavBar/NavButton";
 import Profile from "./components/User/Profile";
 import ChangePassword from "./components/User/ChangePassword";
+import AddShipment from "./components/Shipment/Forms/AddShipment";
 
 const ls = new SecureLS({ encodingType: "aes" })
 
@@ -30,13 +31,7 @@ function App() {
         {isLoggedin &&
           <Fragment>
             <NavBar />
-            <Container sx={{ mt: 2 }}>
-              <Grid container>
-                <Grid item xs={12} md={12} >
-                  <NavButton />
-                </Grid>
-              </Grid>
-            </Container>
+            <NavButton />
           </Fragment>
         }
         <main>
@@ -47,6 +42,9 @@ function App() {
             </Route>
             <Route exact path='/shipment' element={<PrivateRoute isLoggedIn={isLoggedin} />}>
               <Route exact path='/shipment' element={<Shipment />} />
+            </Route>
+            <Route exact path='/shipment/add' element={<PrivateRoute isLoggedIn={isLoggedin} />}>
+              <Route exact path='/shipment/add' element={<AddShipment />} />
             </Route>
             <Route exact path='/webmail' element={<PrivateRoute isLoggedIn={isLoggedin} />}>
               <Route exact path='/webmail' element={<Webmail />} />

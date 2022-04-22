@@ -4,7 +4,7 @@ import React, { Fragment, useState } from 'react';
 import * as Yup from 'yup'
 import useStyles from './FormStyles'
 import { useDispatch, useSelector } from 'react-redux';
-import { ResetPassword } from '../../actions/Auth'
+import { ResetPassword } from '../../../actions/Auth'
 import { useNavigate, Link } from 'react-router-dom';
 
 const ResetPasswordForm = () => {

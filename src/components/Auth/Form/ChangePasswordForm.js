@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import useStyles from './FormStyles'
 import { TextField, Button, Alert, InputAdornment, IconButton } from '@mui/material'
-import { ChangePassword } from '../../actions/Auth'
+import { ChangePassword } from '../../../actions/Auth'
 import { useNavigate } from 'react-router-dom'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';

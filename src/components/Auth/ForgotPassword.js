@@ -1,6 +1,6 @@
 import { Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
-import ForgotPasswordForm from '../Form/ForgotPasswordForm'
+import ForgotPasswordForm from './Form/ForgotPasswordForm'
 import useStyles from './AuthStyles'
 
 const ForgotPassword = () => {

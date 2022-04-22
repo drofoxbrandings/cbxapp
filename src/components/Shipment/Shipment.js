@@ -1,10 +1,12 @@
-import { Container, Grid } from "@mui/material";
+import { Button, Container, Grid, IconButton, Link } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux'
 import { getShipment } from '../../actions/Shipment'
 import * as API from '../../api/index'
 import moment from 'moment'
+import AddIcon from '@mui/icons-material/Add';
+import { NavLink } from 'react-router-dom'
 
 
 const Shipment = () => {
@@ -19,7 +21,6 @@ const Shipment = () => {
         API.getShipment({ limit: limit, offset: offset })
             .then((response) => {
                 setApiResponse(response.data)
-                console.log(response.data)
             })
     }, [])
 
@@ -30,7 +31,6 @@ const Shipment = () => {
                     return sStatus.shipmentStatus
                 })
             })
-            console.log(shipmentStatus)
             setShipment(
                 apiResponse.map((shipment) => ({
                     id: shipment.shipmentRefNo,
@@ -48,9 +48,9 @@ const Shipment = () => {
         }
     }, [apiResponse])
 
-    useEffect(() => {
-        // console.log(shipment)
-    }, [shipment])
+   const handleAddShipmentClick = () => {
+
+   }
 
 
     const columns = [
@@ -69,7 +69,14 @@ const Shipment = () => {
     return (
         <Container>
             <Grid container>
-                <Grid item xs={12} style={{ height: '80vh', width: "100%" }}>
+                <Grid item xs={12} sx={{ width: "100%", display: 'flex', justifyContent: 'flex-end' }}>
+                    <IconButton component={NavLink} color='secondary' onClick={handleAddShipmentClick} to='/shipment/add'>
+                        <AddIcon />
+                    </IconButton>
+                    
+                </Grid>
+                <Grid item xs={12} sx={{ height: '80vh', width: "100%", position: 'relative' }}>
+
                     <DataGrid
                         rows={shipment}
                         columns={columns}
