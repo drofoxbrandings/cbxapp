@@ -19,6 +19,7 @@ export const Login = (loginData, navigate) => async (dispatch) => {
       dispatch({ type: ERROR_MESSAGE, payload: '' })
       ls.set('AuthToken', data.token)
       ls.set('user', data.userId)
+      ls.set('isLoggedIn', true)
       navigate('/dashboard')
       dispatch({ type: LOADING, payload: false })
     }
@@ -28,6 +29,8 @@ export const Login = (loginData, navigate) => async (dispatch) => {
       dispatch({ type: ERROR, payload: true })
       dispatch({ type: ERROR_MESSAGE, payload: data.message })
       ls.set('AuthToken', "")
+      ls.set('user', '')
+      ls.set('isLoggedIn', false)
     }
 
   } catch (error) {
@@ -36,6 +39,8 @@ export const Login = (loginData, navigate) => async (dispatch) => {
     dispatch({ type: ERROR, payload: true })
     dispatch({ type: ERROR_MESSAGE, payload: error.message })
     ls.set('AuthToken', "")
+    ls.set('user', '')
+      ls.set('isLoggedIn', false)
   }
 };
 
