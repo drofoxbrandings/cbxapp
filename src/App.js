@@ -23,7 +23,7 @@ import AddShipment from "./components/Shipment/Forms/AddShipment";
 const ls = new SecureLS({ encodingType: "aes" })
 
 function App() {
-  const isLoggedin = useSelector((state) => state.AuthReducer.isLoggedin)
+  const isLoggedin = ls.get('isLoggedIn')
   return (
     <Fragment>
       <Router>
