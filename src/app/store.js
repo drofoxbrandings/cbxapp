@@ -1,8 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import AuthReducer from "../features/Authentication/AuthenticationSlice";
+import shipmentReducer from "../features/Shipment/ShipmentSlice";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    authentication: AuthReducer,
+    shipment: shipmentReducer,
   },
+  middleware: (getDefaultMiddleWare) =>
+    getDefaultMiddleWare({
+      serializableCheck: false,
+    }),
 });
