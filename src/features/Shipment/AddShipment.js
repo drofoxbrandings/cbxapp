@@ -1,21 +1,17 @@
 import { Paper } from "@mui/material";
 import React, { useEffect } from "react";
 import ShipmentForm from "./Forms/ShipmentForm";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getShipmentStatus } from "./ShipmentApis";
-import { getShipmentStatusState } from "./ShipmentSlice";
-
-const AddShipment = () => {
+import { useLocation } from "react-router-dom";
+const AddShipment = ({ role }) => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const getshipmentList = async () => {
+    const getshipmentStatusList = async () => {
       await dispatch(getShipmentStatus()).unwrap();
     };
-    getshipmentList();
+    getshipmentStatusList();
   }, []);
-
-  const _rsShipmentStatusList = useSelector(getShipmentStatusState);
-
   return (
     <Paper
       sx={{
@@ -25,7 +21,7 @@ const AddShipment = () => {
         margin: "1rem auto",
       }}
     >
-      <ShipmentForm status={_rsShipmentStatusList?.data} />
+      <ShipmentForm  role={role} />
     </Paper>
   );
 };

@@ -1,10 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 import {
   activateShipment,
+  addNewShipment,
   deleteShipment,
   discardShipment,
+  getSingleShipment,
   getShipmentStatus,
   listShipment,
+  updateShipment,
 } from "./ShipmentApis";
 
 const initialState = {
@@ -14,7 +17,7 @@ const initialState = {
     error: false,
     message: "",
     data: [],
-    count: 0
+    count: 0,
   },
   statusList: {
     apiStatus: "idle",
@@ -44,7 +47,30 @@ const initialState = {
     message: "",
     data: [],
   },
+  newShipment: {
+    apiStatus: "idle",
+    statusCode: null,
+    error: false,
+    message: "",
+    data: [],
+  },
+  singleShipment: {
+    apiStatus: "idle",
+    statusCode: null,
+    error: false,
+    message: "",
+    data: [],
+  },
+  updateShipment: {
+    apiStatus: "idle",
+    statusCode: null,
+    error: false,
+    message: "",
+    data: [],
+  },
 };
+
+export const resetSingleShipment = createAction("RESET_SINGLE_SHIPMENT");
 
 const shipmentSlice = createSlice({
   name: "shipment",
@@ -52,6 +78,13 @@ const shipmentSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(resetSingleShipment, (state) => {
+        state.singleShipment.apiStatus = "idle";
+        state.singleShipment.statusCode = null;
+        state.singleShipment.error = false;
+        state.singleShipment.message = "";
+        state.singleShipment.data = [];
+      })
       .addCase(listShipment.pending, (state) => {
         state.shipmentList.apiStatus = "pending";
       })
@@ -137,6 +170,57 @@ const shipmentSlice = createSlice({
         state.deleteShipment.error = false;
         state.deleteShipment.message = "";
         state.deleteShipment.data = action.payload.data.message;
+      })
+      .addCase(addNewShipment.pending, (state) => {
+        state.newShipment.apiStatus = "pending";
+      })
+      .addCase(addNewShipment.rejected, (state, action) => {
+        state.newShipment.apiStatus = "failed";
+        state.newShipment.statusCode = action.payload.status;
+        state.newShipment.error = true;
+        state.newShipment.message = action.payload.data.message;
+        state.newShipment.data = [];
+      })
+      .addCase(addNewShipment.fulfilled, (state, action) => {
+        state.newShipment.apiStatus = "success";
+        state.newShipment.statusCode = action.payload.status;
+        state.newShipment.error = false;
+        state.newShipment.message = "";
+        state.newShipment.data = action.payload.data.message;
+      })
+      .addCase(getSingleShipment.pending, (state) => {
+        state.singleShipment.apiStatus = "pending";
+      })
+      .addCase(getSingleShipment.rejected, (state, action) => {
+        state.singleShipment.apiStatus = "failed";
+        state.singleShipment.statusCode = action.payload.status;
+        state.singleShipment.error = true;
+        state.singleShipment.message = action.payload.data.message;
+        state.singleShipment.data = [];
+      })
+      .addCase(getSingleShipment.fulfilled, (state, action) => {
+        state.singleShipment.apiStatus = "success";
+        state.singleShipment.statusCode = action.payload.status;
+        state.singleShipment.error = false;
+        state.singleShipment.message = "";
+        state.singleShipment.data = action.payload.data.data;
+      })
+      .addCase(updateShipment.pending, (state) => {
+        state.updateShipment.apiStatus = "pending";
+      })
+      .addCase(updateShipment.rejected, (state, action) => {
+        state.updateShipment.apiStatus = "failed";
+        state.updateShipment.statusCode = action.payload.status;
+        state.updateShipment.error = true;
+        state.updateShipment.message = action.payload.data.message;
+        state.updateShipment.data = [];
+      })
+      .addCase(updateShipment.fulfilled, (state, action) => {
+        state.updateShipment.apiStatus = "success";
+        state.updateShipment.statusCode = action.payload.status;
+        state.updateShipment.error = false;
+        state.updateShipment.message = action.payload.data.message;
+        state.updateShipment.data = [];
       });
   },
 });
@@ -148,5 +232,8 @@ export const getDiscardShipmentState = (state) =>
 export const getActivateShipmentState = (state) =>
   state.shipment.activateShipment;
 export const getDeleteShipmentState = (state) => state.shipment.deleteShipment;
+export const getNewShipmentState = (state) => state.shipment.newShipment;
+export const getSingleShipmentState = (state) => state.shipment.singleShipment;
+export const getUpdateShipmentState = (state) => state.shipment.updateShipment;
 
 export default shipmentSlice.reducer;

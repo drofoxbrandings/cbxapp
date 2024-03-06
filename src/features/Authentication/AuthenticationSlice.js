@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 import {
   resetPassword,
   sendPasswordResetLink,
@@ -10,6 +10,7 @@ const initialState = {
     apiStatus: "idle",
     statusCode: null,
     message: "",
+    userLoggedIn: false,
     data: [],
   },
   sendPasswordResetLink: {
@@ -24,12 +25,15 @@ const initialState = {
   },
 };
 
+export const revertAll = createAction("REVERT_ALL");
+
 const authenticationSlice = createSlice({
   name: "authentication",
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(revertAll, () => initialState)
       .addCase(userLogin.pending, (state) => {
         state.login.apiStatus = "pending";
       })
@@ -43,6 +47,7 @@ const authenticationSlice = createSlice({
         state.login.statusCode = action.payload.status;
         state.login.message = action.payload.data.message;
         state.login.data = action.payload.data;
+        state.login.userLoggedIn = true;
       })
       .addCase(sendPasswordResetLink.pending, (state) => {
         state.sendPasswordResetLink.apiStatus = "pending";

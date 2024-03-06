@@ -36,6 +36,7 @@ import {
   discardShipment,
   activateShipment,
   deleteShipment,
+  getSingleShipment,
 } from "./ShipmentApis";
 import {
   getActivateShipmentState,
@@ -47,9 +48,10 @@ import ViewShipment from "./ViewShipment";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { popoverClasses } from "@mui/material/Popover";
+import FilterShipment from "./Forms/FilterShipment";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -57,6 +59,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const ShipmentList = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const location = useLocation();
+  const role = location?.state?.role;
   const open = Boolean(anchorEl);
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -72,7 +76,7 @@ const ShipmentList = (props) => {
     },
     {
       field: "commodity",
-      headerName: "Commodity",
+      headerName: "Item",
       flex: 1,
     },
     {
@@ -93,29 +97,29 @@ const ShipmentList = (props) => {
     {
       field: "pickupDate",
       headerName: "Pick up date",
-      flex: 1,
+      flex: 2,
       renderCell: (params) => moment(params.value).format("DD-MM-yyyy"),
     },
     {
       field: "deliveryDate",
       headerName: "Delivery date",
-      flex: 1,
+      flex: 2,
       renderCell: (params) => moment(params.value).format("DD-MM-yyyy"),
     },
     {
       field: "shipperPhone",
       headerName: "Shipper Phone",
-      flex: 1,
+      flex: 2,
     },
     {
       field: "consigneePhone",
       headerName: "Consignee Phone",
-      flex: 1,
+      flex: 2,
     },
     {
       field: "shipmentStatus",
       headerName: "Status",
-      flex: 2,
+      flex: 3,
       renderCell: (params) => {
         const data = params.row.shipmentStatus;
         const lastItem = data[data.length - 1];
@@ -142,85 +146,49 @@ const ShipmentList = (props) => {
     {
       field: "actions",
       headerName: "Actions",
-      flex: 1,
+      flex: 2,
       renderCell: (params) => (
         <Box>
-          <IconButton size="small" color="secondary" onClick={handleMenuClick}>
-            <MoreHorizIcon />
+          <IconButton onClick={() => handleView(params.row)}>
+            <Tooltip title="View">
+              <Visibility fontSize="small" color="primary" />
+            </Tooltip>
           </IconButton>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleMenuClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-            sx={{
-              [`& .${popoverClasses.paper}`]: {
-                boxShadow: "0 0 5px 0 rgba(0,0,0,0.2)",
-              },
-            }}
+          {/* {(props?.role === "admin" || role === "admin") && ( */}
+          <IconButton
+            onClick={
+              props?.role === "admin" || role === "admin"
+                ? () => editShipment(params.row)
+                : () => editStatus(params.row)
+            }
           >
-            <MenuItem
-              onClick={() => {
-                setCurrentRow(params.row);
-                setIsViewMore(true);
-                handleMenuClose();
-              }}
-            >
-              <ListItemIcon>
-                <Visibility fontSize="small" color="primary" />
-              </ListItemIcon>
-              <ListItemText>View</ListItemText>
-            </MenuItem>
-            {props?.user?.role === "admin" && (
-              <MenuItem onClick={handleMenuClose}>
-                <ListItemIcon>
-                  <Edit fontSize="small" color="secondary" />
-                </ListItemIcon>
-                <ListItemText>Edit</ListItemText>
-              </MenuItem>
-            )}
-            {props?.user?.role === "admin" && (
-              <MenuItem
-                onClick={() => {
-                  deleteThisShipment(params.row._id);
-                  handleMenuClose();
-                }}
-              >
-                <ListItemIcon>
-                  <Delete fontSize="small" color="error" />
-                </ListItemIcon>
-                <ListItemText>Delete</ListItemText>
-              </MenuItem>
-            )}
+            <Tooltip title="Edit">
+              <Edit fontSize="small" color="secondary" />
+            </Tooltip>
+          </IconButton>
+          {/* )} */}
+          {(props?.role === "admin" || role === "admin") && (
+            <IconButton onClick={() => deleteThisShipment(params.row._id)}>
+              <Tooltip title="Delete">
+                <Delete fontSize="small" color="error" />
+              </Tooltip>
+            </IconButton>
+          )}
+          {/* <IconButton
+            onClick={() =>
+              changeActiveStatus(params.row._id, params.row.activeFlag)
+            }
+          >
             {!!params.row.activeFlag ? (
-              <MenuItem
-                onClick={() => {
-                  discardThisShipment(params.row._id);
-                  handleMenuClose();
-                }}
-              >
-                <ListItemIcon>
-                  <RemoveCircleIcon fontSize="small" color="error" />
-                </ListItemIcon>
-                <ListItemText>Dectivate</ListItemText>
-              </MenuItem>
+              <Tooltip title="Discard">
+                <RemoveCircleIcon fontSize="small" color="error" />
+              </Tooltip>
             ) : (
-              <MenuItem
-                onClick={() => {
-                  activateThisShipment(params.row._id);
-                  handleMenuClose();
-                }}
-              >
-                <ListItemIcon>
-                  <CheckBoxIcon fontSize="small" color="success" />
-                </ListItemIcon>
-                <ListItemText>Activate</ListItemText>
-              </MenuItem>
+              <Tooltip title="Activate">
+                <CheckBoxIcon fontSize="small" color="success" />
+              </Tooltip>
             )}
-          </Menu>
+          </IconButton> */}
         </Box>
       ),
     },
@@ -237,29 +205,38 @@ const ShipmentList = (props) => {
   const listPayload = {
     limit: rowsPerPage,
     offset: rowsPerPage * currentPage,
+    filter: "",
+    field: "",
   };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const shipmentState = useSelector(getShipmentState);
 
+  const getShipmentList = async (payload) => {
+    await dispatch(listShipment(payload)).unwrap();
+  };
   useEffect(() => {
-    dispatch(listShipment(listPayload)).unwrap();
+    getShipmentList(listPayload);
   }, [currentPage, rowsPerPage]);
-
-  useEffect(() => {
-    console.log(shipmentState);
-  }, [shipmentState]);
 
   const handleClose = () => {
     setIsViewMore(false);
   };
 
-  const discardThisShipment = (id) => {
+  const handleView = (data) => {
+    setCurrentRow(data);
+    setIsViewMore(true);
+    handleMenuClose();
+  };
+
+  const changeActiveStatus = (shipmentId, actionState) => {
     Swal.fire({
       icon: "question",
       title: "Confirm",
-      text: "Are you sure you want to discard this shipment?",
+      text: `Are you sure you want to ${
+        !!actionState ? "discard" : "activate"
+      } this shipment?`,
       confirmButtonColor: "#8f6d26",
       confirmButtonText: "YES",
       showCancelButton: true,
@@ -267,7 +244,11 @@ const ShipmentList = (props) => {
       reverseButtons: true,
     }).then(async (res) => {
       if (res.isConfirmed) {
-        await dispatch(discardShipment(id)).unwrap();
+        if (!!actionState) {
+          await dispatch(discardShipment(shipmentId)).unwrap();
+        } else {
+          await dispatch(activateShipment(shipmentId)).unwrap();
+        }
       }
     });
   };
@@ -297,28 +278,11 @@ const ShipmentList = (props) => {
         }`,
       }).then(async (res) => {
         if (res.isConfirmed) {
-          await dispatch(listShipment(listPayload)).unwrap();
+          getShipmentList(listPayload);
         }
       });
     }
   }, [discardState]);
-
-  const activateThisShipment = (id) => {
-    Swal.fire({
-      icon: "question",
-      title: "Confirm",
-      text: "Are you sure you want to activate this shipment?",
-      confirmButtonColor: "#8f6d26",
-      confirmButtonText: "YES",
-      showCancelButton: true,
-      cancelButtonText: "NO",
-      reverseButtons: true,
-    }).then(async (res) => {
-      if (res.isConfirmed) {
-        await dispatch(activateShipment(id)).unwrap();
-      }
-    });
-  };
 
   useEffect(() => {
     if (activateState.apiStatus === "failed") {
@@ -345,7 +309,7 @@ const ShipmentList = (props) => {
         }`,
       }).then(async (res) => {
         if (res.isConfirmed) {
-          await dispatch(listShipment(listPayload)).unwrap();
+          getShipmentList(listPayload);
         }
       });
     }
@@ -393,11 +357,26 @@ const ShipmentList = (props) => {
         confirmButtonColor: "#8f6d26",
       }).then(async (res) => {
         if (res.isConfirmed) {
-          await dispatch(listShipment(listPayload)).unwrap();
+          getShipmentList(listPayload);
         }
       });
     }
   }, [deleteState]);
+
+  const editShipment = async (params) => {
+    navigate(`/shipment/edit/${params?.shipmentRefNo}`, {
+      replace: true,
+      forceRefresh: true,
+      state: {
+        isEdit: true,
+        shipmentId: params?.shipmentRefNo,
+        mainId: params._id,
+      },
+    });
+  };
+  const editStatus = (data) => {
+    console.log(data);
+  };
 
   return (
     <Grid
@@ -406,10 +385,11 @@ const ShipmentList = (props) => {
         minHeight: "100vh",
         justifyContent: "center",
         alignItems: "center",
+        display: "flex",
       }}
     >
       <Grid item xs={12}>
-        <Paper sx={{ padding: "1rem" }}>
+        <Paper sx={{ padding: "0 1rem" }}>
           <Box
             sx={{
               display: "flex",
@@ -427,12 +407,24 @@ const ShipmentList = (props) => {
               variant="contained"
               color="secondary"
               size="small"
-              onClick={() => navigate("/shipment/new")}
+              onClick={() =>
+                navigate("/shipment/new", {
+                  replace: true,
+                  state: { isEdit: false },
+                })
+              }
             >
               Add new
             </Button>
           </Box>
-          <Box sx={{ height: "80vh", width: "100%" }}>
+          <hr />
+          <Box>
+            <FilterShipment
+              getList={(data) => getShipmentList(data)}
+              listPayload={listPayload}
+            />
+          </Box>
+          <Box sx={{ height: "70vh", width: "100%" }}>
             <DataGrid
               rows={shipmentState?.data}
               columns={columns}

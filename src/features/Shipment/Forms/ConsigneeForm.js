@@ -1,8 +1,9 @@
-import { Box, FormControl, TextField } from '@mui/material'
-import React from 'react'
-import { Controller } from 'react-hook-form'
+import { Box, FormControl, TextField } from "@mui/material";
+import React, { useEffect } from "react";
+import { Controller } from "react-hook-form";
 
 const ConsigneeForm = (props) => {
+
   return (
     <Box sx={{ marginTop: "1rem" }}>
       <FormControl fullWidth margin="dense">
@@ -10,7 +11,13 @@ const ConsigneeForm = (props) => {
           name="consigneeName"
           control={props.control}
           ref={props.ref}
-          defaultValue=""
+          defaultValue={
+            !!props.isEdit
+              ? props?.data?.consigneeName
+                ? props?.data?.consigneeName
+                : ""
+              : ""
+          }
           render={({ field, fieldState }) => (
             <TextField
               {...field}
@@ -29,7 +36,13 @@ const ConsigneeForm = (props) => {
           name="consigneeEmail"
           control={props.control}
           ref={props.ref}
-          defaultValue=""
+          defaultValue={
+            !!props.isEdit
+              ? props?.data?.consigneeEmail
+                ? props?.data?.consigneeEmail
+                : ""
+              : ""
+          }
           render={({ field, fieldState }) => (
             <TextField
               {...field}
@@ -48,7 +61,13 @@ const ConsigneeForm = (props) => {
           name="consigneePhone"
           control={props.control}
           ref={props.ref}
-          defaultValue=""
+          defaultValue={
+            !!props.isEdit
+              ? props?.data?.consigneePhone
+                ? props?.data?.consigneePhone
+                : ""
+              : ""
+          }
           render={({ field, fieldState }) => (
             <TextField
               {...field}
@@ -67,7 +86,13 @@ const ConsigneeForm = (props) => {
           name="delliverLocation"
           control={props.control}
           ref={props.ref}
-          defaultValue=""
+          defaultValue={
+            !!props.isEdit
+              ? props?.data?.delliverLocation
+                ? props?.data?.delliverLocation
+                : ""
+              : ""
+          }
           render={({ field, fieldState }) => (
             <TextField
               {...field}
@@ -86,7 +111,13 @@ const ConsigneeForm = (props) => {
           name="deliveryCity"
           control={props.control}
           ref={props.ref}
-          defaultValue=""
+          defaultValue={
+            !!props.isEdit
+              ? props?.data?.deliveryCity
+                ? props?.data?.deliveryCity
+                : ""
+              : ""
+          }
           render={({ field, fieldState }) => (
             <TextField
               {...field}
@@ -105,7 +136,13 @@ const ConsigneeForm = (props) => {
           name="deliveryCountry"
           control={props.control}
           ref={props.ref}
-          defaultValue=""
+          defaultValue={
+            !!props.isEdit
+              ? props?.data?.deliveryCountry
+                ? props?.data?.deliveryCountry
+                : ""
+              : ""
+          }
           render={({ field, fieldState }) => (
             <TextField
               {...field}
@@ -119,8 +156,33 @@ const ConsigneeForm = (props) => {
           )}
         />
       </FormControl>
+      <FormControl fullWidth margin="dense">
+        <Controller
+          name="consigneePostalCode"
+          control={props.control}
+          ref={props.ref}
+          defaultValue={
+            !!props.isEdit
+              ? props?.data?.consigneePostalCode
+                ? props?.data?.consigneePostalCode
+                : ""
+              : ""
+          }
+          render={({ field, fieldState }) => (
+            <TextField
+              {...field}
+              error={!!fieldState?.error}
+              helperText={fieldState?.error?.message}
+              variant="outlined"
+              size="small"
+              label="Postal code"
+              type="text"
+            />
+          )}
+        />
+      </FormControl>
     </Box>
-  )
-}
+  );
+};
 
-export default ConsigneeForm
+export default ConsigneeForm;

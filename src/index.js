@@ -21,6 +21,7 @@ const theme = createTheme({
     },
     white: {
       main: "#ffffff",
+      light: '#e9e9e9'
     },
     error: {
       main: "#d32f2f",
@@ -29,7 +30,7 @@ const theme = createTheme({
 });
 
 root.render(
-  <Router>
+  <Router forceRefresh={true}>
     <ThemeProvider theme={theme}>
     <Provider store={store}>
       <App />

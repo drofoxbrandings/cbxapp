@@ -21,8 +21,9 @@ import { userLogin } from "./AuthenticationApis";
 import { useNavigate } from "react-router-dom";
 import SecureLS from "secure-ls";
 import { getLoggedInUser } from "./AuthenticationSlice";
+import Loader from "../../components/Loader";
 
-const Login = () => {
+const Login = (props) => {
   const loginSchema = Yup.object().shape({
     username: Yup.string()
       .required("Username is required!!")
@@ -38,10 +39,9 @@ const Login = () => {
     mode: "onBlur",
     resolver: yupResolver(loginSchema),
   });
-
-  const [microLoading, setMicroLoading] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,23 +53,22 @@ const Login = () => {
   const user = useSelector(getLoggedInUser);
 
   useEffect(() => {
-    if (apiStatus === "pending") {
-      setMicroLoading(true);
-    }
     if (apiStatus === "failed") {
-      setMicroLoading(false);
       setErrorAlert(true);
       setErrorMessage(message);
     }
     if (apiStatus === "success") {
+      setLoading(true);
       const ls = new SecureLS({ encodingType: "aes" });
       ls.set("authToken", user.token);
+      ls.set("role", user.role);
+      const role = ls.get("role");
       setTimeout(() => {
-        navigate("/shipment", { replace: true });
-        setMicroLoading(false);
+        navigate("/shipment", { replace: true, state: { role: role } });
+        setLoading(false);
       }, 1500);
     }
-  }, [apiStatus, message, navigate]);
+  }, [apiStatus, message, navigate, user.role]);
 
   const onSubmit = async (values) => {
     await dispatch(userLogin(values)).unwrap();
@@ -78,9 +77,9 @@ const Login = () => {
     <Grid
       container
       sx={{
-        width: '100%',
+        width: "100%",
         minHeight: "100vh",
-        padding: '1rem',
+        padding: "1rem",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -168,17 +167,14 @@ const Login = () => {
               </Typography>
               <FormControl fullWidth sx={{ margin: "1rem 0" }}>
                 <Button variant="contained" type="submit" color="primary">
-                  {!!microLoading ? (
-                    <CircularProgress sx={{ color: "#fff" }} size={24} />
-                  ) : (
-                    "Login"
-                  )}
+                  Login
                 </Button>
               </FormControl>
             </form>
           </CardContent>
         </Card>
       </Grid>
+      <Loader open={apiStatus === "pending" || !!loading} />
     </Grid>
   );
 };
